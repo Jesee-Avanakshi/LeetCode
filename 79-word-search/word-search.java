@@ -1,7 +1,6 @@
 class Solution {
     private int ROWS;
     private int COLS;
-    private Set<Pair<Integer, Integer>> path = new HashSet<>();
 
     public boolean exist(char[][] board, String word) {
         ROWS = board.length;
@@ -21,13 +20,13 @@ class Solution {
 
         if(i==word.length()) return true;
 
-        if(r<0||c<0||r>=ROWS || c>=COLS || board[r][c]!=word.charAt(i) || path.contains(new Pair<>(r,c))){
+        if(r<0||c<0||r>=ROWS || c>=COLS || board[r][c]!=word.charAt(i)){
             return false;
         }
-
-        path.add(new Pair<>(r,c));
+        char temp =board[r][c];
+        board[r][c]='#';
         Boolean res = backtrack(board,word,r+1,c,i+1) || backtrack(board,word,r-1,c,i+1) || backtrack(board,word,r,c+1,i+1)||backtrack(board,word,r,c-1,i+1);
-        path.remove(new Pair<>(r,c));
+        board[r][c] = temp;
         return res;
 
     }

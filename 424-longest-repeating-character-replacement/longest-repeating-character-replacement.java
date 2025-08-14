@@ -1,21 +1,23 @@
 class Solution {
     public int characterReplacement(String s, int k) {
-        int left =0, right = 0, maxfreq = 0, longest = 0, lengthSubString=0 ;
+        int left =0,right=0,longest=0,maxfreq=0;
+
         Map<Character,Integer> freqMap = new HashMap<>();
+
         while(right<s.length()){
-            char ch = s.charAt(right);
-            freqMap.put(ch,freqMap.getOrDefault(ch,0)+1);
-            maxfreq = Math.max(maxfreq,freqMap.get(ch)); 
-            lengthSubString = right-left+1;
-            if(lengthSubString - maxfreq <=k){
-                longest = Math.max(longest,lengthSubString);
+            char rightChar = s.charAt(right);
+            freqMap.put(rightChar,freqMap.getOrDefault(rightChar,0)+1);
+            maxfreq =Math.max(maxfreq,freqMap.get(rightChar));
+            int lengthSubstring = right-left+1;
+            if(lengthSubstring-maxfreq <=k){
+                longest =Math.max(longest,lengthSubstring);
             }else{
-                char leftch = s.charAt(left);
-                freqMap.put(leftch,freqMap.get(leftch)-1);
+                char leftChar = s.charAt(left);
+                freqMap.put(leftChar,freqMap.get(leftChar)-1);
                 left++;
             }
             right++;
         }
-    return longest;
+        return longest;
     }
 }

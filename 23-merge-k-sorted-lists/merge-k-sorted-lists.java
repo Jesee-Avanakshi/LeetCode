@@ -10,47 +10,26 @@
  */
 class Solution {
     public ListNode mergeKLists(ListNode[] lists) {
-        if(lists==null||lists.length==0){
-            return null;
-        }
+        if (lists==null || lists.length==0) return null;
 
-        while(lists.length>1){
-            List<ListNode> mergedLists = new ArrayList<>();
-            for(int i=0;i<lists.length;i+=2){
-                ListNode l1 = lists[i];
-                ListNode l2 = ((i+1) <lists.length)? lists[i+1]:null;
-                mergedLists.add(mergeTwoLists(l1,l2));
-                
+        PriorityQueue<ListNode> minheap = new PriorityQueue<>((a,b)->a.val-b.val);
+
+        for(ListNode node:lists){
+            if(node!=null){
+                minheap.offer(node);
             }
-            lists = mergedLists.toArray(new ListNode[0]);
-            
         }
-        return lists[0];
+        ListNode dummy =new ListNode(0);
+        ListNode curr = dummy;
 
-    }
-    public ListNode mergeTwoLists(ListNode l1,ListNode l2){
-        ListNode dummy = new ListNode();
-        ListNode ptr = dummy;
-
-        while(l1!=null && l2!=null){
-            if(l1.val<l2.val){
-                ptr.next =l1;
-                l1 =l1.next;
-                ptr = ptr.next;
-            }else{
-                ptr.next =l2;
-                l2=l2.next;
-                ptr =ptr.next;
+        while(!minheap.isEmpty()){
+            ListNode node = minheap.poll();
+            curr.next = node;
+            curr =curr.next;
+            if(node.next!=null){
+                minheap.offer(node.next);
             }
-             
-        }
-        if(l1!=null){
-            ptr.next =l1;
-        }
-        if(l2!=null){
-            ptr.next=l2;
         }
         return dummy.next;
-
     }
 }

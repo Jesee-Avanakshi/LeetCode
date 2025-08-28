@@ -9,6 +9,6 @@ class Solution {
                 hashmap.put(nums[i],i);
             }
         }
-        return new int[]{};
+        return null;
     }
 }

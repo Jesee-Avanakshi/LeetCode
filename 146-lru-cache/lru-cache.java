@@ -11,13 +11,11 @@ class ListNode{
 class LRUCache {
 
     int capacity;
-    int size;
     ListNode head;
     ListNode tail;
     Map<Integer,ListNode> map = new HashMap<>();
     public LRUCache(int capacity) {
         this.capacity = capacity;
-        this.size = 0;
         this.head = new ListNode(-1,-1);
         this.tail = new ListNode(-1,-1);
         head.next = tail;
@@ -46,14 +44,12 @@ class LRUCache {
             addNodeAtHead(node);
 
         }else{
-            if(capacity==size){
+            if(capacity== map.size()){
                 //remove LRU which is at tail
                 ListNode node = tail.prev;
                 removeNode(node);
                 //remove form hashmap
                 map.remove(node.key);
-                //decrement size;
-                size--;
             }
                 //create a new node with key and value
                 ListNode newNode = new ListNode(key,value);
@@ -61,8 +57,6 @@ class LRUCache {
                 addNodeAtHead(newNode);
                 //add elem to hashmap (key and node)
                 map.put(key,newNode);
-                //increment size;
-                size++;
         }
     }
     public void addNodeAtHead(ListNode node){

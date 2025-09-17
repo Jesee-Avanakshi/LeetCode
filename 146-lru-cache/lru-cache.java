@@ -1,65 +1,83 @@
-class LRUCache {
-    class Node{
-        int key;
-        int value;
-        Node prev, next;
-
-        Node(int key, int value){
-            this.key=key;
-            this.value = value;
-        }
+class ListNode{
+    int key;
+    int value;
+    ListNode prev;
+    ListNode next;
+    ListNode(int key,int value){
+        this.key = key;
+        this.value = value;
     }
-    private final int capacity;
-    private final HashMap<Integer,Node> cache;
-    private final Node head, tail;
+}
+class LRUCache {
+
+    int capacity;
+    int size;
+    ListNode head;
+    ListNode tail;
+    Map<Integer,ListNode> map = new HashMap<>();
     public LRUCache(int capacity) {
         this.capacity = capacity;
-        this.cache = new HashMap<>();
-        head = new Node(0,0);
-        tail = new Node(0,0);
+        this.size = 0;
+        this.head = new ListNode(-1,-1);
+        this.tail = new ListNode(-1,-1);
         head.next = tail;
         tail.prev = head;
     }
-
-    public void insert(Node node){
-        Node temp = head.next;
-        head.next = node;
-        node.prev =head;
-        node.next = temp;
-        temp.prev = node;
-    }
-    public void remove(Node node){
-        Node prev = node.prev;
-        Node next = node.next;
-        prev.next = next;
-        next.prev = prev;
-    }
     
     public int get(int key) {
-        if(!cache.containsKey(key)){
-            return -1;
+        if(map.containsKey(key)){
+            ListNode node = map.get(key);
+            //remove the node and add it at the front
+            removeNode(node);
+            addNodeAtHead(node);
+            return node.value;
         }
-        Node node = cache.get(key);
-        remove(node);
-        insert(node);
-        return node.value;
+        return -1;
     }
     
     public void put(int key, int value) {
-        if(cache.containsKey(key)){
-            remove(cache.get(key));
-        }
-        Node node = new Node(key,value);
-        cache.put(key,node);
-        insert(node);
+        if(map.containsKey(key)){
+            //get the Node from hashmap and update value
+            ListNode node = map.get(key);
+            node.value = value;
+            //disconnect from the DLL (remove node)
+            removeNode(node);
+            //connect at head pointer (add node at head)
+            addNodeAtHead(node);
 
-        if (cache.size()>capacity){
-            Node lru =tail.prev;
-            remove (lru);
-            cache.remove(lru.key);
+        }else{
+            if(capacity==size){
+                //remove LRU which is at tail
+                ListNode node = tail.prev;
+                removeNode(node);
+                //remove form hashmap
+                map.remove(node.key);
+                //decrement size;
+                size--;
+            }
+                //create a new node with key and value
+                ListNode newNode = new ListNode(key,value);
+                //add at head
+                addNodeAtHead(newNode);
+                //add elem to hashmap (key and node)
+                map.put(key,newNode);
+                //increment size;
+                size++;
         }
     }
+    public void addNodeAtHead(ListNode node){
+        //add at head position
+        node.next = head.next;
+        node.prev = head;
+        head.next = node;
+        node.next.prev = node;
+    }
+    public void removeNode(ListNode node){
+        node.next.prev = node.prev;
+        node.prev.next = node.next;
+    }
 }
+
 
 /**
  * Your LRUCache object will be instantiated and called as such:

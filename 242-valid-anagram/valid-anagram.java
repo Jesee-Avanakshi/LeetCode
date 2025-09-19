@@ -2,15 +2,21 @@ class Solution {
 
     public boolean isAnagram(String s, String t) {
         if(s.length()!=t.length()) return false;
-        int[] arrayS = new int[26];
-        int[] arrayT = new int[26];
+        int[] result = new int[26];
+        
         for(int i=0;i<s.length();i++){
             char charS = s.charAt(i);
             char charT = t.charAt(i);
-            arrayS[charS-'a']++;
-            arrayT[charT-'a']++;
+            result[charS-'a']++;
+            result[charT-'a']--;
         }
-        return Arrays.equals(arrayS,arrayT);
+        for(int i=0;i<result.length;i++){
+            if(result[i] != 0){
+                return false;
+            }
+        }
+
+        return true;
     }
     // public boolean isAnagram(String s, String t) {
     //     if(s.length()!=t.length()) return false;

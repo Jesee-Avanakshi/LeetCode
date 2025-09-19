@@ -3,17 +3,13 @@ class Solution {
         int left = 0;
         int right = 0;
         int maxLength = 0;
-        Set<Character> seen = new HashSet<>();
+        Map<Character,Integer> map = new HashMap<>();
         while(right<s.length()){
             char charR = s.charAt(right);
-            if(seen.contains(charR)){
-                while(seen.contains(charR)){
-                    char charL = s.charAt(left);
-                    seen.remove(charL);
-                    left++;
-                }
+            if(map.containsKey(charR)){
+                left = Math.max(map.get(charR) + 1,left);
             }
-            seen.add(charR);
+            map.put(charR,right);
             maxLength = Math.max(maxLength,right-left+1);
             right++;
         }

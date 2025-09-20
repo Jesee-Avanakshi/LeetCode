@@ -1,94 +1,64 @@
-class Node{
-    int val;
-    Node prev;
-    Node next;
-    Node(int val, Node next, Node prev){
-        this.val = val;
-        this.prev = next;
-        this.next = prev;
-    }
-}
 class MyCircularDeque {
-    Node head;
-    Node rear;
-    int size;
     int capacity;
+    int count;
+    int[] queue;
+    int head;
+    int rear;
     public MyCircularDeque(int k) {
-        size=0;
-        capacity = k;
+        this.capacity = k;
+        this.count=0;
+        this.queue = new int[k];
+        head=0;
+        rear =k-1;
     }
     
     public boolean insertFront(int value) {
         if(isFull()) return false;
-        if(head == null){
-            head = new Node(value,null,null);
-            rear = head;
-        }else{
-            Node newHead =new Node(value,null,head);
-            head.prev = newHead;
-            head =newHead;
-        }
-        size++;
+        head =(head - 1 + capacity) % capacity;
+        queue[head] =value;
+        
+        count++;
         return true;
     }
     
     public boolean insertLast(int value) {
         if(isFull()) return false;
-        if(head==null){ //means it is first node
-            head = new Node(value,null,null);
-            rear=head;
-        }else{
-            Node newnode = new Node(value,rear,null);
-            rear.next = newnode;
-            rear = newnode;
-        }
-        size++;
+        rear = (rear+1)%capacity;
+        queue[rear] = value;
+        count++;
         return true;
     }
     
     public boolean deleteFront() {
         if(isEmpty()) return false;
-        if(size==1){
-            head=null;
-            rear=null;
-            
-        }else{
-            head =head.next;
-            head.prev = null;
-        }
-        size--;
+        head = (head+1) % capacity;
+        count--;
         return true;
     }
     
     public boolean deleteLast() {
         if(isEmpty()) return false;
-        if(size==1){
-            head=null;
-            rear=null;
-        }else{
-            rear =rear.prev;
-            rear.next = null;
-        }
-        size--;
+        rear = (rear-1+capacity)%capacity;
+        count--;
         return true;
     }
     
     public int getFront() {
         if(isEmpty()) return -1;
-        return head.val;
+        return queue[head];
     }
     
     public int getRear() {
         if(isEmpty()) return -1;
-        return rear.val;
+        return queue[rear];
     }
     
     public boolean isEmpty() {
-        return size==0;
+        return count==0;
     }
     
     public boolean isFull() {
-        return size==capacity;
+        return count==capacity;
     }
 }
 

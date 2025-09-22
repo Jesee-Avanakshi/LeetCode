@@ -3,21 +3,20 @@ class ListNode{
     int value;
     ListNode prev;
     ListNode next;
-    ListNode(int key,int value){
+    ListNode(int key, int value){
         this.key = key;
         this.value = value;
+        prev =null;
+        next = null;
     }
 }
 class LRUCache {
-
     int capacity;
-    ListNode head;
-    ListNode tail;
-    Map<Integer,ListNode> map = new HashMap<>();
+    ListNode head =new ListNode(-1,-1);
+    ListNode tail =new ListNode(-1,-1);
+    Map<Integer, ListNode> map = new HashMap<>();
     public LRUCache(int capacity) {
         this.capacity = capacity;
-        this.head = new ListNode(-1,-1);
-        this.tail = new ListNode(-1,-1);
         head.next = tail;
         tail.prev = head;
     }
@@ -25,9 +24,8 @@ class LRUCache {
     public int get(int key) {
         if(map.containsKey(key)){
             ListNode node = map.get(key);
-            //remove the node and add it at the front
             removeNode(node);
-            addNodeAtHead(node);
+            addNodeAtTail(node);
             return node.value;
         }
         return -1;
@@ -35,43 +33,34 @@ class LRUCache {
     
     public void put(int key, int value) {
         if(map.containsKey(key)){
-            //get the Node from hashmap and update value
             ListNode node = map.get(key);
             node.value = value;
-            //disconnect from the DLL (remove node)
             removeNode(node);
-            //connect at head pointer (add node at head)
-            addNodeAtHead(node);
-
+            addNodeAtTail(node);
         }else{
-            if(capacity== map.size()){
-                //remove LRU which is at tail
-                ListNode node = tail.prev;
+            if(capacity==map.size()){
+                ListNode node =head.next;
                 removeNode(node);
-                //remove form hashmap
                 map.remove(node.key);
             }
-                //create a new node with key and value
-                ListNode newNode = new ListNode(key,value);
-                //add at head
-                addNodeAtHead(newNode);
-                //add elem to hashmap (key and node)
-                map.put(key,newNode);
+            ListNode newNode = new ListNode(key,value);
+            addNodeAtTail(newNode);
+            map.put(key,newNode);
         }
+        
     }
-    public void addNodeAtHead(ListNode node){
-        //add at head position
-        node.next = head.next;
-        node.prev = head;
-        head.next = node;
-        node.next.prev = node;
+    public void addNodeAtTail(ListNode node){
+        node.next =tail;
+        node.prev = tail.prev;
+        tail.prev.next = node;
+        tail.prev = node;
     }
+
     public void removeNode(ListNode node){
-        node.next.prev = node.prev;
         node.prev.next = node.next;
+        node.next.prev = node.prev;
     }
 }
-
 
 /**
  * Your LRUCache object will be instantiated and called as such:

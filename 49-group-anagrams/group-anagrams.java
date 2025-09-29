@@ -4,8 +4,8 @@ class Solution {
 
         for(String str:strs){
             int[] freq = new int[26];
-            for(char c:str.toCharArray()){
-                freq[c-'a'] +=1;
+            for(int i=0;i<str.length();i++){
+                freq[str.charAt(i)-'a']++;
             }
             String key = Arrays.toString(freq);
             map.putIfAbsent(key,new ArrayList<>());

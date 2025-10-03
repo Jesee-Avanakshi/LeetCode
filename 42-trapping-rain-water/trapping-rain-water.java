@@ -16,14 +16,11 @@ class Solution {
 
         for( int i=0;i<n;i++){
             int minimum =  Math.min(leftMax[i],rightMax[i]);
-            System.out.println("For index : "+ i);
-            System.out.println("Minimum :" + minimum);
-            System.out.println("height :" + height[i]);
+            
             if(height[i]<minimum){
                 res= res + (minimum-height[i]);
                 System.out.println(res);
             }
-            System.out.println("result : "+ res);
 
         }
         return res;

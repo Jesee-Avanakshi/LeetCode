@@ -14,13 +14,19 @@ class MinStack {
             return;
         }
         stack.push(val);
-        minStack.push(Math.min(minStack.peek(),val));
+        if(val<=minStack.peek()){
+            minStack.push(val);
+        }
+        
     }
     
     public void pop() {
         if(stack.isEmpty()) return;
+        
+        if(stack.peek() <= minStack.peek()){
+            minStack.pop();
+        }
         stack.pop();
-        minStack.pop();
     }
     
     public int top() {
